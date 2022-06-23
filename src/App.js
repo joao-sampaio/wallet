@@ -6,12 +6,14 @@ import Wallet from './pages/Wallet';
 function App() {
   return (
     <Switch>
-      <Route exact path="/">
+      <Route exact path="/" component={ Login } />
+      <Route path="/carteira" component={ Wallet } />
+      {/* <Route exact path="/">
         <Login />
       </Route>
       <Route path="/carteira">
         <Wallet />
-      </Route>
+      </Route> */}
     </Switch>
     // <div>
     //   <h1>Hello, TrybeWallet!</h1>

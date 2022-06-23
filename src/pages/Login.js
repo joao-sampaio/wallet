@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import store from '../store';
+// import store from '../store';
+import { connect } from 'react-redux';
 
 class Login extends React.Component {
   state = {
@@ -29,7 +30,8 @@ class Login extends React.Component {
       .test(email);
     const MIN = 6;
     this.setState({ isLogged: (test && password.length >= MIN) });
-    store.dispatch({ type: 'email', payload: { value: email } });
+    const { dispatch } = this.props
+    dispatch({ type: 'email', payload: { value: email } });
   };
 
   render() {
@@ -66,4 +68,5 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+// export default Login;
+export default connect()(Login);
