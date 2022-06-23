@@ -44,3 +44,14 @@ body {
   background-color: #282c34;
   color: azure;
 }
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+
+h2 {
+  margin: 0;
+  padding-left: 11px;
+  padding-right: 11px;
+}

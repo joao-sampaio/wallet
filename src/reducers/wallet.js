@@ -2,13 +2,15 @@
 // Esse reducer será responsável por tratar as informações da pessoa usuária
 
 const INITIAL_STATE = {
-  temp: '',
+  total: 0,
+  currency: 'BRL',
 };
 
 function walletReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
-  case 'NEW_ACTION':
-    return { state: action.state };
+  const { type, payload } = action;
+  switch (type) {
+  case 'email':
+    return { total: payload.total };
   default:
     return state;
   }
