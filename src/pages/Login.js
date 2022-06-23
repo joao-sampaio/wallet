@@ -1,23 +1,66 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
+import store from '../store';
 
 class Login extends React.Component {
-// state = {
-//   email: '',
-//   password: '',
-// };
+  state = {
+    email: '',
+    password: '',
+    isLogged: false,
+  };
 
-  onclick = (e) => {
+  handleChange = async ({ target }) => {
+    const { name, value } = target;
+    this.setState({ [name]: value });
+  };
+
+  buttonDisable = () => {
+    const { email, password } = this.state;
+    const test = /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      .test(email);
+    const MIN = 6;
+    return !(test && password.length >= MIN);
+  }
+
+  onclick = async (e) => {
     e.preventDefault();
-    console.log('sodnfoda');
+    const { email, password } = this.state;
+    const test = /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      .test(email);
+    const MIN = 6;
+    this.setState({ isLogged: (test && password.length >= MIN) });
+    store.dispatch({ type: 'email', payload: { value: email } });
   };
 
   render() {
+    const { isLogged } = this.state;
+    const { handleChange, buttonDisable } = this;
     return (
       <div>
-        <input data-testid="email-input" type="text" />
-        <input data-testid="password-input" type="text" minLength="6" />
-        <button onClick={ this.onclick } type="button">Entrar</button>
-
+        {isLogged === true ? <Redirect to="/carteira" /> : (
+          <>
+            <input
+              name="email"
+              data-testid="email-input"
+              type="email"
+              onChange={ handleChange }
+            />
+            <input
+              name="password"
+              data-testid="password-input"
+              type="password"
+              minLength="6"
+              onChange={ handleChange }
+            />
+            <button
+              disabled={ buttonDisable() }
+              onClick={ this.onclick }
+              type="button"
+            >
+              Entrar
+            </button>
+          </>
+        )}
       </div>
     );
   }
