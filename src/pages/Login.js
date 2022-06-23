@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 // import store from '../store';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class Login extends React.Component {
   state = {
@@ -30,7 +31,7 @@ class Login extends React.Component {
       .test(email);
     const MIN = 6;
     this.setState({ isLogged: (test && password.length >= MIN) });
-    const { dispatch } = this.props
+    const { dispatch } = this.props;
     dispatch({ type: 'email', payload: { value: email } });
   };
 
@@ -67,6 +68,10 @@ class Login extends React.Component {
     );
   }
 }
+
+Login.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
 
 // export default Login;
 export default connect()(Login);
