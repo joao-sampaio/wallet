@@ -11,10 +11,7 @@ import thunk from 'redux-thunk';
 import reducer from '../reducers';
 
 const store = createStore(
-  reducer,
-  composeWithDevTools(
-    applyMiddleware(thunk),
-  ),
+  reducer, applyMiddleware(thunk)
 );
 
 export default store;
