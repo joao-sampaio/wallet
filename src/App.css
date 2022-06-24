@@ -46,10 +46,10 @@ body {
 }
 
 header {
-  display: flex;
   border: 3px solid white;
-  justify-content: space-between;
   border-radius: 3px;
+  display: flex;
+  justify-content: space-between;
 }
 
 h3 {
