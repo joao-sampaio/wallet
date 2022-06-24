@@ -4,18 +4,26 @@ const INITIAL_STATE = {
   // total: 0,
   // currency: 'BRL',
   currencies: [],
+  currenciesNames: [],
+  expenses: [],
 };
 
 function walletReducer(state = INITIAL_STATE, action) {
   const { type, payload } = action;
   if (type === 'getCurrencies') {
     const data = payload.currencies;
-    // const asArray = Object.keys(data);
-    // const obj = asArray.filter((c) => c !== 'USDT');
-    // const currencies = Object.fromEntries(obj);
-    const currencies = Object.keys(data).filter((c) => c !== 'USDT');
+    const currenciesNames = Object.keys(data).filter((c) => c !== 'USDT');
     return {
-      currencies,
+      ...state,
+      currenciesNames,
+      currencies: data,
+    };
+  } if (type === 'setExpenses') {
+    const { expenses } = payload;
+    console.log(payload);
+    return {
+      ...state,
+      expenses,
     };
   }
   return state;
