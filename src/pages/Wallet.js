@@ -41,7 +41,7 @@ class Wallet extends React.Component {
 
   onclick = async (e) => {
     e.preventDefault();
-    const { dispatch, wallet: { currencies } } = this.props;
+    const { dispatch, wallet: { currenciesValues } } = this.props;
     await dispatch(fetchCurrencies());
     const { total, currency, id, value, description,
       method, tag, expenses } = this.state;
@@ -52,17 +52,13 @@ class Wallet extends React.Component {
       currency,
       tag,
       method,
-      exchangeRates: currencies,
+      exchangeRates: currenciesValues,
     };
-    const convert = (parseFloat(value) * parseFloat(currencies[currency].ask));
+    const convert = (parseFloat(value) * parseFloat(currenciesValues[currency].ask));
     this.setState({
       total: total + convert,
       id: id + 1,
       value: 0,
-      // description: '',
-      // currency: 'USD',
-      // tag: ALI,
-      // method: 'Dinheiro',
       expenses: [...expenses, obj],
     });
     dispatch({ type: 'setExpenses', payload: { expenses: [...expenses, obj] } });
@@ -70,9 +66,9 @@ class Wallet extends React.Component {
   };
 
   render() {
-    const { user: { email }, wallet: { currenciesNames } } = this.props;
+    const { user: { email }, wallet: { expenses, currencies } } = this.props;
     // console.log(this.props);
-    const { total, expenses, value } = this.state;
+    const { total, value } = this.state;
     const { handleChange } = this;
     return (
       <div>
@@ -106,7 +102,7 @@ class Wallet extends React.Component {
           <label htmlFor="currency">
             Moeda:
             <select onChange={ handleChange } name="currency" id="currency">
-              {currenciesNames.map((c) => <option key={ c }>{ c }</option>)}
+              {currencies.map((c) => <option key={ c }>{ c }</option>)}
             </select>
           </label>
           <label htmlFor="method">
@@ -142,9 +138,42 @@ class Wallet extends React.Component {
             Adicionar despesa
           </button>
         </form>
-        <div>
-          {expenses.map((e) => <h3 key={ e.id }>{e.description}</h3>)}
-        </div>
+        {console.log(this.props)}
+        <table>
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Tag</th>
+              <th>Método de pagamento</th>
+              <th>Valor</th>
+              <th>Moeda</th>
+              <th>Câmbio utilizado</th>
+              <th>Valor convertido</th>
+              <th>Moeda de conversão</th>
+              <th>Editar/Excluir</th>
+            </tr>
+          </thead>
+          <tbody>
+            {console.log(expenses)}
+            {expenses.map((e) => (
+              <tr key={ e.id }>
+                <td>{e.description}</td>
+                <td>{e.tag}</td>
+                <td>{e.method}</td>
+                <td>{parseFloat(e.value).toFixed(2)}</td>
+                <td>{e.exchangeRates[e.currency].name.split('/')[0]}</td>
+                <td>{parseFloat(e.exchangeRates[e.currency].ask).toFixed(2)}</td>
+                <td>
+                  {(e.value * parseFloat(e.exchangeRates[e.currency].ask)).toFixed(2)}
+                </td>
+                <td>Real</td>
+                <td>Editar/Excluir</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {/* {expenses.map((e) => <h3 key={ e.id }>{e.description}</h3>)} */}
+
       </div>
     );
   }
@@ -153,8 +182,9 @@ class Wallet extends React.Component {
 Wallet.propTypes = {
   user: PropTypes.objectOf(PropTypes.string).isRequired,
   wallet: PropTypes.shape({
-    currenciesNames: PropTypes.arrayOf(PropTypes.string),
-    currencies: PropTypes.objectOf(PropTypes.object),
+    currencies: PropTypes.arrayOf(PropTypes.string),
+    currenciesValues: PropTypes.objectOf(PropTypes.object),
+    expenses: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
